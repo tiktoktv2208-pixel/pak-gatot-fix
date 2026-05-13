@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameTrade Academy – Kursus Jual Beli Akun Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d0f1a;--card:#151827;--border:#1e2540;--accent:#f0c040;--accent2:#3de0c8;--text:#e8eaf0;--muted:#7a82a0;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  a{text-decoration:none;color:inherit;}
+  html{scroll-behavior:smooth;}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:99;
+    background:#0d0f1acc;backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 5%;
+  }
+  .logo{font-family:'Rajdhani',sans-serif;font-size:1.5rem;font-weight:700;color:var(--accent);}
+  .logo span{color:var(--accent2);}
+  .nav-links{display:flex;gap:20px;list-style:none;}
+  .nav-links a{font-size:.88rem;font-weight:600;color:var(--muted);transition:.2s;}
+  .nav-links a:hover{color:var(--accent);}
+  .nav-right{display:flex;align-items:center;gap:8px;}
+  .btn-nav{
+    background:var(--accent);color:#0d0f1a;
+    padding:8px 20px;border-radius:8px;font-weight:700;
+    font-size:.85rem;cursor:pointer;border:none;transition:.2s;
+    text-decoration:none;display:inline-block;font-family:'Nunito',sans-serif;
+  }
+  .btn-nav:hover{background:var(--accent2);}
+  .btn-nav-outline{
+    background:transparent;color:var(--accent2);
+    border:1.5px solid var(--accent2);padding:7px 16px;
+    border-radius:8px;font-weight:700;font-size:.82rem;
+    cursor:pointer;transition:.2s;
+    text-decoration:none;display:inline-block;font-family:'Nunito',sans-serif;
+  }
+  .btn-nav-outline:hover{background:var(--accent2);color:#0d0f1a;}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .hamburger span{width:24px;height:2px;background:var(--text);border-radius:2px;display:block;}
+
+  /* USER BADGE */
+  .user-badge{
+    display:flex;align-items:center;gap:8px;
+    background:var(--card);border:1px solid var(--border);
+    border-radius:8px;padding:6px 12px;font-size:.82rem;
+  }
+  .user-badge strong{color:var(--accent);}
+  .user-badge .role-tag{
+    background:#332a0f;color:var(--accent);
+    border-radius:4px;padding:1px 7px;font-size:.72rem;font-weight:700;
+  }
+  .btn-logout{
+    background:none;border:1px solid #ff5c5c44;color:#ff5c5c;
+    padding:5px 10px;border-radius:6px;font-size:.75rem;font-weight:700;
+    cursor:pointer;transition:.2s;font-family:'Nunito',sans-serif;
+  }
+  .btn-logout:hover{background:#ff5c5c;color:#fff;}
+
+  /* HERO */
+  .hero{
+    text-align:center;padding:80px 5% 60px;
+    background:radial-gradient(ellipse 70% 50% at 50% 0%,#1a2540,#0d0f1a);
+  }
+  .hero h1{font-family:'Rajdhani',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;line-height:1.15;}
+  .hero h1 span{color:var(--accent);}
+  .hero p{color:var(--muted);margin:16px auto 32px;max-width:540px;line-height:1.7;}
+  .hero-btns{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--accent);color:#0d0f1a;
+    padding:14px 34px;border-radius:10px;
+    font-weight:700;font-size:1rem;border:none;cursor:pointer;
+    transition:.2s;display:inline-block;font-family:'Nunito',sans-serif;text-decoration:none;
+  }
+  .btn-primary:hover{background:var(--accent2);transform:translateY(-2px);}
+  .btn-outline{
+    background:transparent;color:var(--accent);
+    border:2px solid var(--accent);padding:12px 28px;
+    border-radius:10px;font-weight:700;font-size:.95rem;
+    cursor:pointer;transition:.2s;display:inline-block;
+    font-family:'Nunito',sans-serif;text-decoration:none;
+  }
+  .btn-outline:hover{background:var(--accent);color:#0d0f1a;transform:translateY(-2px);}
+
+  /* GUEST BANNER */
+  .guest-banner{
+    background:#1a2540;border:1px solid #3de0c844;
+    border-radius:12px;padding:16px 22px;margin:0 5% 0;
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:12px;
+  }
+  .guest-banner p{font-size:.87rem;color:var(--text);}
+  .guest-banner p span{color:var(--accent2);font-weight:700;}
+
+  /* STATS */
+  .stats{
+    display:flex;justify-content:center;gap:40px;flex-wrap:wrap;
+    padding:30px 5%;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  }
+  .stat{text-align:center;}
+  .stat strong{font-family:'Rajdhani',sans-serif;font-size:2rem;color:var(--accent);}
+  .stat p{font-size:.8rem;color:var(--muted);}
+
+  /* SECTION */
+  section{padding:60px 5%;}
+  .section-title{font-family:'Rajdhani',sans-serif;font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+  .section-title span{color:var(--accent);}
+  .section-sub{color:var(--muted);margin-bottom:36px;font-size:.9rem;}
+
+  /* FITUR GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;transition:.2s;}
+  .card:hover{border-color:var(--accent);transform:translateY(-3px);}
+  .card-icon{font-size:2rem;margin-bottom:12px;}
+  .card h3{font-family:'Rajdhani',sans-serif;font-size:1.1rem;margin-bottom:8px;color:var(--accent2);}
+  .card p{font-size:.85rem;color:var(--muted);line-height:1.65;}
+
+  /* PROGRESS TRACKER */
+  .progress-bar-wrap{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:12px;padding:16px 20px;margin-bottom:24px;
+    display:flex;align-items:center;gap:16px;
+  }
+  .progress-bar{flex:1;height:8px;background:var(--border);border-radius:8px;overflow:hidden;}
+  .progress-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.5s;}
+  .progress-text{font-size:.83rem;color:var(--muted);white-space:nowrap;}
+
+  /* MATERI ACCORDION */
+  .accordion{border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:10px;}
+  .acc-header{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 22px;cursor:pointer;background:var(--card);transition:.2s;
+  }
+  .acc-header:hover{background:#1c2035;}
+  .acc-title{display:flex;align-items:center;gap:10px;flex:1;}
+  .acc-title h3{font-size:.95rem;font-weight:700;}
+  .acc-done{font-size:.75rem;background:#1a3a2a;color:#3de88a;border-radius:4px;padding:2px 8px;font-weight:700;display:none;}
+  .acc-done.show{display:inline-block;}
+  .acc-arrow{font-size:1.1rem;color:var(--accent);transition:.3s;flex-shrink:0;}
+  .acc-body{display:none;padding:18px 22px;background:#10121e;border-top:1px solid var(--border);}
+  .acc-body p{font-size:.87rem;color:var(--muted);line-height:1.75;}
+  .acc-body ul{margin-top:10px;padding-left:18px;}
+  .acc-body ul li{font-size:.85rem;color:var(--muted);margin-bottom:6px;}
+  .acc-footer{margin-top:16px;display:flex;justify-content:flex-end;}
+  .btn-selesai{
+    background:var(--accent2);color:#0d0f1a;
+    border:none;border-radius:7px;padding:8px 18px;
+    font-size:.82rem;font-weight:700;cursor:pointer;
+    font-family:'Nunito',sans-serif;transition:.2s;
+  }
+  .btn-selesai:hover{background:var(--accent);}
+  .btn-selesai.done{background:#1a3a2a;color:#3de88a;cursor:default;}
+  .accordion.open .acc-body{display:block;}
+  .accordion.open .acc-arrow{transform:rotate(180deg);}
+
+  /* GAME TABLE */
+  .table-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--border);}
+  table{width:100%;border-collapse:collapse;}
+  th{background:#151827;padding:14px 18px;text-align:left;font-size:.82rem;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;}
+  td{padding:13px 18px;font-size:.88rem;border-top:1px solid var(--border);color:var(--muted);}
+  tr:hover td{background:#1a1e2e;color:var(--text);}
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700;}
+  .badge-green{background:#1a3a2a;color:#3de88a;}
+  .badge-yellow{background:#332a0f;color:var(--accent);}
+  .badge-blue{background:#0f2040;color:#60b0ff;}
+
+  /* TESTIMONI */
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
+  .testi-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;}
+  .testi-card .stars{color:var(--accent);font-size:1rem;margin-bottom:10px;}
+  .testi-card p{font-size:.86rem;color:var(--muted);line-height:1.7;font-style:italic;}
+  .testi-meta{margin-top:14px;display:flex;align-items:center;gap:10px;}
+  .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;}
+  .testi-meta strong{font-size:.85rem;display:block;}
+  .testi-meta span{font-size:.75rem;color:var(--muted);}
+
+  /* REKBER */
+  .rekber-box{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:16px;padding:32px;max-width:700px;
+    margin:0 auto;text-align:center;
+  }
+  .rekber-box h3{font-family:'Rajdhani',sans-serif;font-size:1.5rem;margin-bottom:10px;color:var(--accent);}
+  .rekber-box p{color:var(--muted);font-size:.88rem;line-height:1.7;margin-bottom:20px;}
+  .rekber-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-bottom:24px;}
+  .step{background:#0d0f1a;border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:.83rem;color:var(--text);}
+  .step strong{color:var(--accent2);display:block;font-size:.75rem;margin-bottom:4px;}
+
+  /* FOOTER */
+  footer{text-align:center;padding:30px 5%;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem;}
+  footer span{color:var(--accent);}
+
+  @media(max-width:640px){
+    .nav-links{display:none;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:#0d0f1a;padding:16px 5%;border-bottom:1px solid var(--border);}
+    .nav-links.show{display:flex;}
+    .hamburger{display:flex;}
+    .hero{padding:60px 5% 40px;}
+    .stats{gap:20px;}
+    .hero-btns{flex-direction:column;align-items:stretch;}
+    .btn-primary,.btn-outline{text-align:center;}
+    .user-badge{flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Game<span>Trade</span> Academy</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#materi">Materi</a></li>
+    <li><a href="#game">Game</a></li>
+    <li><a href="#rekber">Rekber</a></li>
+    <li><a href="#testimoni">Testimoni</a></li>
+  </ul>
+  <div class="nav-right" id="navRight">
+    <!-- diisi oleh JS berdasarkan session -->
+    <a href="index.html" class="btn-nav-outline">Masuk</a>
+    <a href="index.html?tab=signup" class="btn-nav">Daftar</a>
+  </div>
+  <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Kursus <span>Jual Beli</span> Akun Game<br>Paling Aman & Terpercaya</h1>
+  <p>Pelajari cara transaksi akun game dengan aman, menghindari penipuan, memilih seller amanah, dan banyak lagi — semuanya gratis untuk member!</p>
+  <div class="hero-btns">
+    <a href="index.html?tab=signup" class="btn-primary" id="heroSignupBtn">🎮 Mulai Belajar Gratis</a>
+    <a href="#materi" class="btn-outline">📚 Lihat Materi</a>
+  </div>
+</div>
+
+<!-- GUEST BANNER (untuk pengunjung yang belum login) -->
+<div class="guest-banner" id="guestBanner" style="display:none;">
+  <p>📌 Kamu melihat preview materi. <span>Daftar gratis</span> untuk akses penuh & lacak progress belajar kamu.</p>
+  <a href="index.html?tab=signup" class="btn-primary" style="padding:9px 20px;font-size:.85rem;">Daftar Gratis →</a>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><strong>2.400+</strong><p>Member Aktif</p></div>
+  <div class="stat"><strong>10</strong><p>Modul Materi</p></div>
+  <div class="stat"><strong>98%</strong><p>Transaksi Aman</p></div>
+  <div class="stat"><strong>4.9★</strong><p>Rating Kursus</p></div>
+</div>
+
+<!-- FITUR UNGGULAN -->
+<section>
+  <div class="section-title">✨ Kenapa <span>GameTrade Academy</span>?</div>
+  <p class="section-sub">Platform belajar jual beli akun game #1 di Indonesia</p>
+  <div class="grid">
+    <div class="card"><div class="card-icon">🛡️</div><h3>Transaksi 100% Aman</h3><p>Sistem Rekber terpercaya memastikan uang kamu aman hingga akun diterima dan diverifikasi.</p></div>
+    <div class="card"><div class="card-icon">📚</div><h3>10 Modul Gratis</h3><p>Semua materi dari dasar hingga mahir tersedia gratis untuk member terdaftar.</p></div>
+    <div class="card"><div class="card-icon">🎮</div><h3>20+ Game Populer</h3><p>Mendukung ML, PUBG, FF, Genshin, Valorant, dan masih banyak lagi.</p></div>
+    <div class="card"><div class="card-icon">⭐</div><h3>Testimoni Terverifikasi</h3><p>Semua testimoni asli dari member nyata, tidak bisa dimanipulasi seller.</p></div>
+  </div>
+</section>
+
+<!-- MATERI -->
+<section id="materi" style="background:#0a0c16;">
+  <div class="section-title">📚 <span>Modul</span> Materi Kursus</div>
+  <p class="section-sub">Klik setiap modul untuk membuka materi lengkapnya.</p>
+
+  <!-- Progress bar (hanya tampil kalau login) -->
+  <div class="progress-bar-wrap" id="progressWrap" style="display:none;">
+    <span style="font-size:.85rem;color:var(--muted);">Progress Belajar:</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-text" id="progressText">0 / 10 Modul</span>
+  </div>
+
+  <div id="accordionList">
+    <!-- Accordion dirender oleh JS -->
+  </div>
+</section>
+
+<!-- GAME TERSEDIA -->
+<section id="game">
+  <div class="section-title">🎮 Game yang <span>Tersedia</span></div>
+  <p class="section-sub">Daftar game populer yang tersedia untuk jual beli akun di platform kami.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Game</th><th>Platform</th><th>Harga Mulai</th><th>Garansi</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>⚔️ Mobile Legends</td><td>Android / iOS</td><td>Rp 50.000</td><td>1x24 Jam</td><td><span class="badge badge-green">Tersedia</span></td></tr>
+        <tr><td>🔫 PUBG Mobile</td><td>Android / iOS</td><td>Rp 75.000</td><td>1x24 Jam</td><td><span class="badge badge-green">Tersedia</span></td></tr>
+        <tr><td>🔥 Free Fire</td><td>Android / iOS</td><td>Rp 40.000</td><td>1x24 Jam</td><td><span class="badge badge-green">Tersedia</span></td></tr>
+        <tr><td>🌸 Genshin Impact</td><td>PC / Mobile</td><td>Rp 150.000</td><td>1x24 Jam</td><td><span class="badge badge-green">Tersedia</span></td></tr>
+        <tr><td>🔴 Valorant</td><td>PC</td><td>Rp 200.000</td><td>1x24 Jam</td><td><span class="badge badge-green">Tersedia</span></td></tr>
+        <tr><td>⚡ Honkai: Star Rail</td><td>PC / Mobile</td><td>Rp 120.000</td><td>1x24 Jam</td><td><span class="badge badge-green">Tersedia</span></td></tr>
+        <tr><td>🏆 Call of Duty Mobile</td><td>Android / iOS</td><td>Rp 60.000</td><td>1x24 Jam</td><td><span class="badge badge-yellow">Terbatas</span></td></tr>
+        <tr><td>🎯 Arena of Valor</td><td>Android / iOS</td><td>Rp 35.000</td><td>1x24 Jam</td><td><span class="badge badge-blue">Segera</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- REKBER INFO -->
+<section id="rekber" style="background:#0a0c16;">
+  <div class="section-title">🤝 Sistem <span>Rekber</span> Kami</div>
+  <p class="section-sub">Rekening Bersama — Jaminan keamanan transaksi kamu</p>
+  <div class="rekber-box">
+    <h3>Bagaimana Rekber Bekerja?</h3>
+    <p>Sistem Rekber memastikan uang kamu aman. Dana hanya dicairkan ke seller setelah pembeli konfirmasi akun sudah diterima dengan baik.</p>
+    <div class="rekber-steps">
+      <div class="step"><strong>Langkah 1</strong>Pembeli transfer ke Rekber</div>
+      <div class="step"><strong>Langkah 2</strong>Seller kirim data akun</div>
+      <div class="step"><strong>Langkah 3</strong>Pembeli verifikasi akun</div>
+      <div class="step"><strong>Langkah 4</strong>Rekber cairkan dana ke Seller</div>
+    </div>
+    <a href="index.html?tab=signup" class="btn-primary" style="display:inline-block;width:auto;padding:12px 28px;">🤝 Daftar Jadi Rekber</a>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section id="testimoni">
+  <div class="section-title">⭐ <span>Testimoni</span> Member</div>
+  <p class="section-sub">Apa kata mereka yang sudah bergabung?</p>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"Awalnya takut beli akun game, setelah ikut kursus di sini jadi paham cara aman transaksi. Udah 3x beli, semua lancar!"</p>
+      <div class="testi-meta">
+        <div class="avatar" style="background:#332a0f;color:var(--accent);">AR</div>
+        <div><strong>Aldi R.</strong><span>Member sejak Jan 2024</span></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"Materi modul Rekber-nya sangat detail. Sekarang saya udah jadi rekber dan sudah handle 50+ transaksi tanpa masalah!"</p>
+      <div class="testi-meta">
+        <div class="avatar" style="background:#0f2040;color:#60b0ff;">SN</div>
+        <div><strong>Sinta N.</strong><span>Rekber aktif</span></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★☆</div>
+      <p>"Platform ini lengkap banget. Sebagai seller baru, tips di modul 9 tentang seller amanah benar-benar membantu membangun reputasi."</p>
+      <div class="testi-meta">
+        <div class="avatar" style="background:#1a3a2a;color:#3de88a;">BW</div>
+        <div><strong>Bagas W.</strong><span>Seller terverifikasi</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 <span>GameTrade Academy</span>. All rights reserved.
+  | <a href="index.html" style="color:var(--accent2)">Masuk / Daftar</a>
+</footer>
+
+<script>
+// ==================== DATA MODUL ====================
+const modules = [
+  {
+    title: "1. Panduan Jual Beli Akun Game yang Aman",
+    content: `<p>Jual beli akun game bisa sangat berisiko jika tidak tahu caranya. Ikuti langkah-langkah berikut:</p>
+    <ul>
+      <li>Selalu gunakan platform atau marketplace yang sudah terverifikasi.</li>
+      <li>Jangan pernah bayar sebelum melihat bukti kepemilikan akun (screenshot detail akun).</li>
+      <li>Gunakan Rekber (Rekening Bersama) agar uang aman hingga akun diterima.</li>
+      <li>Simpan semua bukti transaksi: screenshot chat, bukti transfer, foto akun.</li>
+      <li>Hindari transaksi melalui DM media sosial tanpa jaminan pihak ketiga.</li>
+    </ul>`
+  },
+  {
+    title: "2. Memilih Admin yang Sudah Terkenal",
+    content: `<p>Admin terpercaya biasanya memiliki ciri-ciri yang bisa kamu verifikasi:</p>
+    <ul>
+      <li>Memiliki followers/member grup yang banyak dan aktif.</li>
+      <li>Sudah lama berjualan (minimal 1 tahun lebih) dengan rekam jejak jelas.</li>
+      <li>Testimoni yang bisa dicek langsung dari pembeli nyata.</li>
+      <li>Bersedia layani Rekber tanpa keberatan.</li>
+      <li>Merespon pertanyaan dengan ramah dan profesional.</li>
+      <li>Ada nomor atau identitas yang bisa diverifikasi jika dibutuhkan.</li>
+    </ul>`
+  },
+  {
+    title: "3. Game yang Tersedia di Platform",
+    content: `<p>Platform ini mendukung jual beli akun berbagai game populer, antara lain:</p>
+    <ul>
+      <li><strong>Mobile Legends:</strong> Skin, hero legend, epic skin, custom.</li>
+      <li><strong>PUBG Mobile:</strong> UC, skin senjata, outfit, royale pass.</li>
+      <li><strong>Free Fire:</strong> Diamond, bundle, akun mythic.</li>
+      <li><strong>Genshin Impact:</strong> Primogem, karakter 5★, weapon.</li>
+      <li><strong>Valorant:</strong> VP, skin knife, agent unlock.</li>
+    </ul>`
+  },
+  {
+    title: "4. Harga yang Pas dan Wajar",
+    content: `<p>Harga yang terlalu murah patut dicurigai. Panduan menentukan harga wajar:</p>
+    <ul>
+      <li>Bandingkan harga di minimal 3 seller berbeda sebelum membeli.</li>
+      <li>Harga wajar biasanya 60–80% dari harga normal item jika dibeli baru.</li>
+      <li>Akun dengan skin/item langka bisa lebih mahal — cek keaslian itemnya.</li>
+      <li>Jangan tergiur harga di bawah 50% harga pasaran tanpa alasan jelas.</li>
+    </ul>`
+  },
+  {
+    title: "5. Garansi dan All Reff (Referensi)",
+    content: `<p>Seller atau admin terpercaya wajib menyediakan garansi dan referensi yang bisa dicek:</p>
+    <ul>
+      <li><strong>Garansi:</strong> Minimal garansi 1x24 jam setelah akun diterima untuk verifikasi.</li>
+      <li><strong>All Reff:</strong> Semua referensi (email, nomor HP, akun sosmed lama) diserahkan ke pembeli.</li>
+      <li>Pastikan email akun bisa diganti ke email pembeli.</li>
+      <li>Seller wajib bantu proses transfer akun jika ada kendala teknis.</li>
+    </ul>`
+  },
+  {
+    title: "6. Rekber (Rekening Bersama)",
+    content: `<p>Rekber adalah sistem perlindungan transaksi yang paling aman. Cara kerjanya:</p>
+    <ul>
+      <li>Pembeli transfer uang ke Rekber (pihak ketiga terpercaya), BUKAN langsung ke seller.</li>
+      <li>Setelah akun diterima dan diverifikasi pembeli, Rekber baru mencairkan dana ke seller.</li>
+      <li>Jika ada masalah, Rekber jadi penengah yang adil.</li>
+      <li>Pilih Rekber yang sudah dikenal di komunitas game trading.</li>
+      <li>Biaya Rekber biasanya 2–5% dari total transaksi.</li>
+    </ul>`
+  },
+  {
+    title: "7. Ciri-Ciri Admin yang Mencurigakan",
+    content: `<p>Waspadai tanda-tanda berikut sebelum bertransaksi:</p>
+    <ul>
+      <li>Akun baru dibuat, tidak ada riwayat transaksi sebelumnya.</li>
+      <li>Menolak Rekber dengan berbagai alasan.</li>
+      <li>Testimoni berupa screenshot yang terlihat diedit atau tidak konsisten.</li>
+      <li>Menawarkan harga yang sangat murah di bawah pasaran tanpa alasan.</li>
+      <li>Meminta bayar DP dulu tanpa ada jaminan apapun.</li>
+    </ul>`
+  },
+  {
+    title: "8. Keamanan Data Akun",
+    content: `<p>Setelah membeli akun, langkah keamanan yang wajib dilakukan:</p>
+    <ul>
+      <li>Segera ganti password akun setelah menerima.</li>
+      <li>Ganti email ke email pribadi yang aman.</li>
+      <li>Aktifkan verifikasi 2 langkah (2FA) jika tersedia.</li>
+      <li>Hapus semua perangkat lama yang terhubung ke akun.</li>
+      <li>Cek apakah akun pernah kena ban atau pelanggaran sebelumnya.</li>
+    </ul>`
+  },
+  {
+    title: "9. Seller yang Amanah",
+    content: `<p>Seller amanah punya karakter yang bisa kamu kenali:</p>
+    <ul>
+      <li>Jujur tentang kondisi akun — tidak menyembunyikan cacat atau riwayat ban.</li>
+      <li>Responsif dan cepat membalas pesan.</li>
+      <li>Siap bantu after-sale service (membantu jika ada masalah pasca pembelian).</li>
+      <li>Menyediakan bukti kepemilikan yang lengkap dan jelas.</li>
+      <li>Punya komunitas atau grup dengan member nyata yang bisa dikonfirmasi.</li>
+    </ul>`
+  },
+  {
+    title: "10. Testimoni 100% Asli",
+    content: `<p>Cara memastikan testimoni yang kamu lihat adalah asli:</p>
+    <ul>
+      <li>Cek profil pemberi testimoni — apakah akun nyata dan aktif.</li>
+      <li>Testimoni asli biasanya tidak terlalu sempurna dan menyebutkan detail spesifik.</li>
+      <li>Tanya langsung ke orang yang memberi testimoni untuk konfirmasi.</li>
+      <li>Hindari testimoni yang semua formatnya sama persis — kemungkinan besar palsu.</li>
+      <li>Testimoni video lebih susah dipalsukan dibanding screenshot.</li>
+    </ul>`
+  }
+];
+
+// ==================== SESSION & PROGRESS ====================
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('gta_session')); } catch { return null; }
+}
+function getProgress() {
+  try { return JSON.parse(localStorage.getItem('gta_progress') || '[]'); } catch { return []; }
+}
+function saveProgress(arr) {
+  localStorage.setItem('gta_progress', JSON.stringify(arr));
+}
+
+// ==================== RENDER NAV ====================
+function renderNav() {
+  const session = getSession();
+  const navRight = document.getElementById('navRight');
+  const heroSignupBtn = document.getElementById('heroSignupBtn');
+
+  if (session) {
+    const roleLabels = { member:'Member', seller:'Seller', rekber:'Rekber', admin:'Admin' };
+    navRight.innerHTML = `
+      <div class="user-badge">
+        <span>👤 <strong>${session.name.split(' ')[0]}</strong></span>
+        <span class="role-tag">${roleLabels[session.role] || session.role}</span>
+      </div>
+      <button class="btn-logout" onclick="logout()">Keluar</button>
+    `;
+    heroSignupBtn.textContent = '📚 Lanjut Belajar';
+    heroSignupBtn.href = '#materi';
+    document.getElementById('guestBanner').style.display = 'none';
+  } else {
+    document.getElementById('guestBanner').style.display = 'flex';
+  }
+}
+
+// ==================== RENDER ACCORDION ====================
+function renderAccordions() {
+  const session = getSession();
+  const progress = getProgress();
+  const list = document.getElementById('accordionList');
+  list.innerHTML = '';
+
+  modules.forEach((mod, i) => {
+    const isDone = progress.includes(i);
+    const el = document.createElement('div');
+    el.className = 'accordion';
+    el.dataset.index = i;
+
+    el.innerHTML = `
+      <div class="acc-header" onclick="toggleAcc(this.parentElement)">
+        <div class="acc-title">
+          <h3>${mod.title}</h3>
+          <span class="acc-done ${isDone ? 'show' : ''}">✓ Selesai</span>
+        </div>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        ${mod.content}
+        ${session ? `
+        <div class="acc-footer">
+          <button class="btn-selesai ${isDone ? 'done' : ''}" onclick="markDone(${i}, this)" ${isDone ? 'disabled' : ''}>
+            ${isDone ? '✓ Sudah Selesai' : '✔ Tandai Selesai'}
+          </button>
+        </div>` : `
+        <div class="acc-footer">
+          <a href="index.html?tab=signup" style="font-size:.8rem;color:var(--accent2);">🔒 Daftar gratis untuk lacak progress →</a>
+        </div>`}
+      </div>
+    `;
+    list.appendChild(el);
+  });
+
+  updateProgress();
+}
+
+// ==================== PROGRESS ====================
+function updateProgress() {
+  const session = getSession();
+  if (!session) { document.getElementById('progressWrap').style.display = 'none'; return; }
+
+  const progress = getProgress();
+  const count = progress.length;
+  const pct = Math.round((count / modules.length) * 100);
+
+  document.getElementById('progressWrap').style.display = 'flex';
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${count} / ${modules.length} Modul`;
+}
+
+function markDone(index, btn) {
+  const session = getSession();
+  if (!session) { window.location.href = 'index.html?tab=signup'; return; }
+
+  const progress = getProgress();
+  if (!progress.includes(index)) {
+    progress.push(index);
+    saveProgress(progress);
+  }
+
+  btn.textContent = '✓ Sudah Selesai';
+  btn.classList.add('done');
+  btn.disabled = true;
+
+  // Update badge di header
+  const acc = btn.closest('.accordion');
+  acc.querySelector('.acc-done').classList.add('show');
+
+  updateProgress();
+}
+
+// ==================== ACCORDION ====================
+function toggleAcc(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.accordion.open').forEach(a => a.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// ==================== LOGOUT ====================
+function logout() {
+  localStorage.removeItem('gta_session');
+  window.location.reload();
+}
+
+// ==================== NAV MOBILE ====================
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('show');
+}
+
+// ==================== INIT ====================
+renderNav();
+renderAccordions();
+</script>
+</body>
+</html>

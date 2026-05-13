@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Rekber – GameTrade Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d0f1a;--card:#151827;--border:#1e2540;--accent:#3de0c8;--accent2:#f0c040;--text:#e8eaf0;--muted:#7a82a0;--danger:#ff5c5c;--success:#3de88a;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  a{text-decoration:none;color:inherit;}
+
+  /* NAV */
+  nav{
+    background:#0d0f1acc;backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 5%;position:sticky;top:0;z-index:99;
+  }
+  .logo{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:var(--accent);}
+  .logo span{color:var(--accent2);}
+  .nav-right{display:flex;align-items:center;gap:10px;}
+  .role-badge{background:#0d1e1e;color:var(--accent);border-radius:6px;padding:4px 12px;font-size:.78rem;font-weight:700;border:1px solid var(--accent)44;}
+  .btn-logout{background:none;border:1px solid #ff5c5c44;color:#ff5c5c;padding:6px 14px;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.2s;}
+  .btn-logout:hover{background:#ff5c5c;color:#fff;}
+
+  /* LAYOUT */
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 57px);}
+
+  /* SIDEBAR */
+  .sidebar{background:var(--card);border-right:1px solid var(--border);padding:24px 0;}
+  .sidebar-section{padding:0 18px;margin-bottom:6px;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
+  .sidebar-item{
+    display:flex;align-items:center;gap:10px;
+    padding:11px 22px;font-size:.87rem;font-weight:600;color:var(--muted);
+    cursor:pointer;transition:.2s;border-left:3px solid transparent;
+  }
+  .sidebar-item:hover{color:var(--text);background:#1a1e2e;}
+  .sidebar-item.active{color:var(--accent);border-left-color:var(--accent);background:#0d1e1e44;}
+  .sidebar-item .icon{font-size:1.1rem;width:22px;text-align:center;}
+
+  /* MAIN */
+  .main{padding:30px 32px;overflow-y:auto;}
+
+  /* PAGE */
+  .page{display:none;}
+  .page.active{display:block;}
+
+  /* HEADER */
+  .page-header{margin-bottom:28px;}
+  .page-header h1{font-family:'Rajdhani',sans-serif;font-size:1.8rem;font-weight:700;color:var(--accent);}
+  .page-header p{color:var(--muted);font-size:.88rem;margin-top:4px;}
+
+  /* STAT CARDS */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;margin-bottom:28px;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .stat-card .label{font-size:.77rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
+  .stat-card .value{font-family:'Rajdhani',sans-serif;font-size:1.8rem;font-weight:700;color:var(--accent);}
+  .stat-card .sub{font-size:.75rem;color:var(--muted);margin-top:4px;}
+
+  /* CARDS & TABLE */
+  .section-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:22px;}
+  .section-card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .section-card-header h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;color:var(--accent);}
+  table{width:100%;border-collapse:collapse;}
+  th{background:#0d0f1a;padding:12px 16px;text-align:left;font-size:.78rem;color:var(--accent2);text-transform:uppercase;letter-spacing:.04em;}
+  td{padding:12px 16px;font-size:.86rem;border-top:1px solid var(--border);color:var(--muted);}
+  tr:hover td{background:#1a1e2e;color:var(--text);}
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.73rem;font-weight:700;}
+  .badge-green{background:#1a3a2a;color:#3de88a;}
+  .badge-yellow{background:#332a0f;color:#f0c040;}
+  .badge-blue{background:#0f2040;color:#60b0ff;}
+  .badge-teal{background:#0d1e1e;color:var(--accent);}
+  .badge-red{background:#3a1a1a;color:#ff5c5c;}
+
+  /* FORM */
+  .form-group{margin-bottom:16px;}
+  .form-group label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
+  .form-group input,.form-group select,.form-group textarea{
+    width:100%;padding:11px 14px;border-radius:9px;
+    border:1.5px solid var(--border);background:#0d0f1a;
+    color:var(--text);font-size:.88rem;font-family:'Nunito',sans-serif;transition:.2s;outline:none;
+  }
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #3de0c822;}
+  .form-group textarea{resize:vertical;min-height:80px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .btn-submit{
+    background:var(--accent);color:#0d0f1a;border:none;border-radius:9px;
+    padding:12px 28px;font-weight:700;font-size:.9rem;cursor:pointer;
+    font-family:'Nunito',sans-serif;transition:.2s;
+  }
+  .btn-submit:hover{background:var(--accent2);}
+  .btn-action{
+    border:none;border-radius:6px;padding:5px 12px;
+    font-size:.75rem;font-weight:700;cursor:pointer;
+    font-family:'Nunito',sans-serif;transition:.2s;
+  }
+  .btn-cairkan{background:#1a3a2a;color:#3de88a;}
+  .btn-cairkan:hover{background:#3de88a;color:#0d0f1a;}
+  .btn-dispute{background:#3a1a1a;color:#ff5c5c;}
+  .btn-dispute:hover{background:#ff5c5c;color:#fff;}
+
+  /* INFO CARD */
+  .info-card{
+    background:linear-gradient(135deg,#0d1e1e,#0d0f1a);
+    border:1px solid var(--accent)44;border-radius:14px;
+    padding:24px;margin-bottom:22px;
+  }
+  .info-card h3{font-family:'Rajdhani',sans-serif;font-size:1.2rem;color:var(--accent);margin-bottom:8px;}
+  .info-card p{font-size:.85rem;color:var(--muted);line-height:1.7;}
+
+  /* KURSUS LINK */
+  .kursus-card{
+    background:linear-gradient(135deg,#0d1e1e,#0a0c16);
+    border:1px solid var(--accent);border-radius:14px;
+    padding:24px;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:14px;margin-bottom:22px;
+  }
+  .kursus-card h3{font-family:'Rajdhani',sans-serif;font-size:1.2rem;color:var(--accent);}
+  .kursus-card p{font-size:.85rem;color:var(--muted);margin-top:4px;max-width:460px;line-height:1.6;}
+  .btn-kursus{
+    background:var(--accent);color:#0d0f1a;border:none;border-radius:9px;
+    padding:10px 22px;font-weight:700;font-size:.85rem;cursor:pointer;
+    font-family:'Nunito',sans-serif;transition:.2s;text-decoration:none;display:inline-block;
+  }
+  .btn-kursus:hover{background:var(--accent2);}
+
+  /* EMPTY */
+  .empty{text-align:center;padding:40px 20px;color:var(--muted);}
+  .empty .icon{font-size:2.5rem;margin-bottom:10px;}
+  .empty p{font-size:.87rem;}
+
+  @media(max-width:700px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{display:flex;overflow-x:auto;padding:10px 0;border-right:none;border-bottom:1px solid var(--border);}
+    .sidebar-section{display:none;}
+    .sidebar-item{padding:10px 16px;border-left:none;border-bottom:3px solid transparent;white-space:nowrap;}
+    .sidebar-item.active{border-bottom-color:var(--accent);border-left:none;}
+    .main{padding:20px 16px;}
+    .form-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Game<span>Trade</span> <span style="color:var(--muted);font-size:1rem;">|</span> <span style="color:var(--text);font-size:1rem;">Dashboard Rekber</span></div>
+  <div class="nav-right">
+    <span class="role-badge">🤝 Rekber</span>
+    <span id="navName" style="font-size:.85rem;color:var(--muted);"></span>
+    <button class="btn-logout" onclick="logout()">Keluar</button>
+  </div>
+</nav>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">Menu</div>
+    <div class="sidebar-item active" onclick="showPage('dashboard', this)"><span class="icon">📊</span> Dashboard</div>
+    <div class="sidebar-item" onclick="showPage('order', this)"><span class="icon">📋</span> Order Masuk</div>
+    <div class="sidebar-item" onclick="showPage('history', this)"><span class="icon">📜</span> Riwayat</div>
+    <div class="sidebar-item" onclick="showPage('mediasi', this)"><span class="icon">⚖️</span> Mediasi / Dispute</div>
+    <div class="sidebar-section" style="margin-top:16px;">Belajar</div>
+    <div class="sidebar-item" onclick="showPage('kursus', this)"><span class="icon">📚</span> Materi Kursus</div>
+    <div class="sidebar-section" style="margin-top:16px;">Akun</div>
+    <div class="sidebar-item" onclick="showPage('profil', this)"><span class="icon">👤</span> Profil Saya</div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="pageDashboard">
+      <div class="page-header">
+        <h1>Selamat Datang, Rekber! 🤝</h1>
+        <p id="dashWelcome">Kamu adalah penengah terpercaya antara pembeli dan seller.</p>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="label">Order Aktif</div><div class="value">0</div><div class="sub">Sedang diproses</div></div>
+        <div class="stat-card"><div class="label">Selesai</div><div class="value">0</div><div class="sub">Total transaksi</div></div>
+        <div class="stat-card"><div class="label">Dana Ditahan</div><div class="value">Rp 0</div><div class="sub">Menunggu konfirmasi</div></div>
+        <div class="stat-card"><div class="label">Komisi</div><div class="value">Rp 0</div><div class="sub">Total pendapatan</div></div>
+      </div>
+
+      <div class="kursus-card">
+        <div>
+          <h3>📚 Wajib Baca Sebelum Bertugas!</h3>
+          <p>Sebagai Rekber, kamu harus paham cara kerja sistem Rekber, cara mediasi dispute, dan tanggung jawab pihak ketiga. Baca Modul 6 terlebih dahulu.</p>
+        </div>
+        <a href="kursus.html#materi" class="btn-kursus">Buka Kursus →</a>
+      </div>
+
+      <div class="info-card">
+        <h3>🤝 Tugas & Tanggung Jawab Rekber</h3>
+        <p>
+          Sebagai Rekber, kamu bertugas:<br>
+          ✅ Menerima dana dari pembeli dan menahannya dengan aman.<br>
+          ✅ Memastikan seller mengirim data akun setelah pembeli transfer.<br>
+          ✅ Mencairkan dana ke seller setelah pembeli konfirmasi akun diterima.<br>
+          ✅ Menjadi penengah yang adil jika ada sengketa atau dispute.<br>
+          ⚠️ Rekber bertanggung jawab penuh atas dana yang dipegang selama proses transaksi.
+        </p>
+      </div>
+
+      <div class="section-card">
+        <div class="section-card-header"><h3>📋 Panduan Alur Rekber</h3></div>
+        <div style="padding:20px;">
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#0d0f1a;border-radius:8px;">
+              <span style="font-size:1.1rem;">1️⃣</span>
+              <div><strong style="color:var(--accent);">Terima Order</strong><br><span style="font-size:.82rem;color:var(--muted);">Pembeli dan Seller setuju menggunakan kamu sebagai Rekber.</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#0d0f1a;border-radius:8px;">
+              <span style="font-size:1.1rem;">2️⃣</span>
+              <div><strong style="color:var(--accent);">Pembeli Transfer</strong><br><span style="font-size:.82rem;color:var(--muted);">Pembeli transfer total harga ke rekening/wallet kamu. Konfirmasi penerimaan.</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#0d0f1a;border-radius:8px;">
+              <span style="font-size:1.1rem;">3️⃣</span>
+              <div><strong style="color:var(--accent);">Seller Kirim Akun</strong><br><span style="font-size:.82rem;color:var(--muted);">Beri tahu seller bahwa dana sudah diterima. Minta seller kirim data akun.</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#0d0f1a;border-radius:8px;">
+              <span style="font-size:1.1rem;">4️⃣</span>
+              <div><strong style="color:var(--accent);">Pembeli Verifikasi</strong><br><span style="font-size:.82rem;color:var(--muted);">Tunggu konfirmasi dari pembeli bahwa akun sudah diterima dan sesuai (maks 1x24 jam).</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#0d0f1a;border-radius:8px;">
+              <span style="font-size:1.1rem;">5️⃣</span>
+              <div><strong style="color:var(--accent);">Cairkan Dana</strong><br><span style="font-size:.82rem;color:var(--muted);">Setelah pembeli konfirmasi OK, cairkan dana ke seller (dikurangi komisi Rekber).</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER PAGE -->
+    <div class="page" id="pageOrder">
+      <div class="page-header">
+        <h1>📋 Order Masuk</h1>
+        <p>Kelola semua order yang menggunakan kamu sebagai Rekber.</p>
+      </div>
+      <div class="section-card" style="margin-bottom:22px;">
+        <div class="section-card-header"><h3>➕ Catat Order Baru</h3></div>
+        <div style="padding:20px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nama Pembeli</label>
+              <input type="text" id="orderBuyer" placeholder="Nama pembeli">
+            </div>
+            <div class="form-group">
+              <label>Nama Seller</label>
+              <input type="text" id="orderSeller" placeholder="Nama seller">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Game / Item</label>
+              <input type="text" id="orderItem" placeholder="Contoh: Akun ML Mythic">
+            </div>
+            <div class="form-group">
+              <label>Nilai Transaksi (Rp)</label>
+              <input type="number" id="orderAmount" placeholder="contoh: 200000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Catatan</label>
+            <textarea id="orderNote" placeholder="Catatan tambahan (opsional)..."></textarea>
+          </div>
+          <button class="btn-submit" onclick="addOrder()">📋 Catat Order</button>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-card-header"><h3>📋 Order Aktif</h3></div>
+        <div id="orderTable">
+          <div class="empty"><div class="icon">📋</div><p>Belum ada order masuk. Catat order baru di atas.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY PAGE -->
+    <div class="page" id="pageHistory">
+      <div class="page-header">
+        <h1>📜 Riwayat Transaksi</h1>
+        <p>Semua transaksi Rekber yang sudah selesai.</p>
+      </div>
+      <div class="section-card">
+        <div class="section-card-header"><h3>📜 Riwayat Selesai</h3></div>
+        <div id="historyTable">
+          <div class="empty"><div class="icon">📜</div><p>Belum ada riwayat transaksi yang selesai.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDIASI PAGE -->
+    <div class="page" id="pageMediasi">
+      <div class="page-header">
+        <h1>⚖️ Mediasi / Dispute</h1>
+        <p>Tangani sengketa antara pembeli dan seller dengan adil.</p>
+      </div>
+      <div class="info-card" style="margin-bottom:20px;">
+        <h3>⚖️ Panduan Mediasi</h3>
+        <p>
+          Jika ada dispute:<br>
+          1. Dengarkan kedua pihak secara adil dan netral.<br>
+          2. Minta bukti dari pembeli (screenshot, video) dan seller (bukti pengiriman data).<br>
+          3. Jangan cairkan dana selama dispute berlangsung.<br>
+          4. Ambil keputusan berdasarkan bukti yang ada.<br>
+          5. Jika tidak bisa diselesaikan, escalate ke Admin platform.
+        </p>
+      </div>
+      <div class="section-card">
+        <div class="section-card-header"><h3>⚖️ Dispute Aktif</h3></div>
+        <div class="empty"><div class="icon">⚖️</div><p>Tidak ada dispute aktif saat ini. Semoga tetap seperti ini!</p></div>
+      </div>
+    </div>
+
+    <!-- KURSUS PAGE -->
+    <div class="page" id="pageKursus">
+      <div class="page-header">
+        <h1>📚 Materi Kursus</h1>
+        <p>Pelajari semua modul untuk menjadi Rekber yang andal dan dipercaya.</p>
+      </div>
+      <div class="kursus-card">
+        <div>
+          <h3>📚 Buka Halaman Kursus Lengkap</h3>
+          <p>Semua 10 modul tersedia di halaman kursus. Sebagai Rekber, fokus terutama pada modul Rekber, Keamanan Data, dan Mediasi.</p>
+        </div>
+        <a href="kursus.html" class="btn-kursus">Buka Kursus →</a>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;">
+        <p style="font-size:.87rem;color:var(--muted);line-height:1.8;">
+          <strong style="color:var(--accent);">Modul penting untuk Rekber:</strong><br>
+          📌 Modul 6 — Cara Kerja Rekber (Wajib!)<br>
+          📌 Modul 8 — Keamanan Data Akun<br>
+          📌 Modul 1 — Panduan Jual Beli Aman<br>
+          📌 Modul 7 — Ciri Admin Mencurigakan<br>
+          📌 Modul 5 — Garansi dan All Reff
+        </p>
+      </div>
+    </div>
+
+    <!-- PROFIL PAGE -->
+    <div class="page" id="pageProfil">
+      <div class="page-header">
+        <h1>👤 Profil Saya</h1>
+        <p>Informasi akun Rekber kamu.</p>
+      </div>
+      <div class="section-card">
+        <div class="section-card-header"><h3>📋 Data Akun</h3></div>
+        <div style="padding:20px;" id="profilContent">
+          <p style="color:var(--muted);font-size:.87rem;">Memuat data profil...</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+// ==================== SESSION ====================
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('gta_session')); } catch { return null; }
+}
+
+const session = getSession();
+if (!session) {
+  window.location.href = 'index.html';
+} else if (session.role !== 'rekber' && session.role !== 'admin') {
+  const dest = { member: 'kursus.html', seller: 'dashboard-seller.html' };
+  window.location.href = dest[session.role] || 'kursus.html';
+}
+
+if (session) {
+  document.getElementById('navName').textContent = session.name;
+  document.getElementById('dashWelcome').textContent = `Halo ${session.name}! Kamu adalah penengah terpercaya antara pembeli dan seller.`;
+}
+
+// ==================== NAVIGATION ====================
+function showPage(name, item) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('page' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
+  item.classList.add('active');
+  if (name === 'profil') renderProfil();
+  if (name === 'history') renderHistory();
+}
+
+// ==================== ORDERS ====================
+function getOrders() {
+  try { return JSON.parse(localStorage.getItem('gta_orders_' + session?.email) || '[]'); } catch { return []; }
+}
+function saveOrders(arr) { localStorage.setItem('gta_orders_' + session?.email, JSON.stringify(arr)); }
+
+function addOrder() {
+  const buyer = document.getElementById('orderBuyer').value.trim();
+  const seller = document.getElementById('orderSeller').value.trim();
+  const item = document.getElementById('orderItem').value.trim();
+  const amount = document.getElementById('orderAmount').value;
+  const note = document.getElementById('orderNote').value.trim();
+
+  if (!buyer || !seller || !item) { alert('Isi nama pembeli, seller, dan item/game.'); return; }
+  if (!amount || isNaN(amount) || parseInt(amount) < 1000) { alert('Masukkan nilai transaksi yang valid.'); return; }
+
+  const orders = getOrders();
+  orders.push({
+    id: Date.now(), buyer, seller, item,
+    amount: parseInt(amount), note,
+    status: 'Menunggu Transfer',
+    createdAt: new Date().toLocaleDateString('id-ID')
+  });
+  saveOrders(orders);
+  renderOrderTable();
+
+  document.getElementById('orderBuyer').value = '';
+  document.getElementById('orderSeller').value = '';
+  document.getElementById('orderItem').value = '';
+  document.getElementById('orderAmount').value = '';
+  document.getElementById('orderNote').value = '';
+}
+
+function updateOrderStatus(id, status) {
+  const orders = getOrders();
+  const o = orders.find(x => x.id == id);
+  if (o) { o.status = status; saveOrders(orders); renderOrderTable(); renderHistory(); }
+}
+
+function renderOrderTable() {
+  const orders = getOrders().filter(o => o.status !== 'Selesai');
+  const wrap = document.getElementById('orderTable');
+  if (!orders.length) {
+    wrap.innerHTML = '<div class="empty"><div class="icon">📋</div><p>Belum ada order aktif.</p></div>';
+    return;
+  }
+  const statusClass = { 'Menunggu Transfer':'badge-yellow', 'Dana Diterima':'badge-teal', 'Akun Dikirim':'badge-blue', 'Selesai':'badge-green' };
+  let html = '<table><thead><tr><th>Pembeli</th><th>Seller</th><th>Item</th><th>Nilai</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+  orders.forEach(o => {
+    html += `<tr>
+      <td>${o.buyer}</td><td>${o.seller}</td><td>${o.item}</td>
+      <td>Rp ${o.amount.toLocaleString('id-ID')}</td>
+      <td><span class="badge ${statusClass[o.status] || 'badge-blue'}">${o.status}</span></td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${o.status === 'Menunggu Transfer' ? `<button class="btn-action btn-cairkan" onclick="updateOrderStatus(${o.id},'Dana Diterima')">✓ Dana Masuk</button>` : ''}
+        ${o.status === 'Dana Diterima' ? `<button class="btn-action btn-cairkan" onclick="updateOrderStatus(${o.id},'Akun Dikirim')">✓ Akun Dikirim</button>` : ''}
+        ${o.status === 'Akun Dikirim' ? `<button class="btn-action btn-cairkan" onclick="updateOrderStatus(${o.id},'Selesai')">✓ Cairkan Dana</button>` : ''}
+        <button class="btn-action btn-dispute" onclick="updateOrderStatus(${o.id},'Dispute')">⚠ Dispute</button>
+      </td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function renderHistory() {
+  const orders = getOrders().filter(o => o.status === 'Selesai' || o.status === 'Dispute');
+  const wrap = document.getElementById('historyTable');
+  if (!orders.length) {
+    wrap.innerHTML = '<div class="empty"><div class="icon">📜</div><p>Belum ada riwayat transaksi selesai.</p></div>';
+    return;
+  }
+  let html = '<table><thead><tr><th>Pembeli</th><th>Seller</th><th>Item</th><th>Nilai</th><th>Status</th><th>Tanggal</th></tr></thead><tbody>';
+  orders.forEach(o => {
+    const sc = o.status === 'Selesai' ? 'badge-green' : 'badge-red';
+    html += `<tr><td>${o.buyer}</td><td>${o.seller}</td><td>${o.item}</td><td>Rp ${o.amount.toLocaleString('id-ID')}</td><td><span class="badge ${sc}">${o.status}</span></td><td>${o.createdAt}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+// ==================== PROFIL ====================
+function renderProfil() {
+  if (!session) return;
+  document.getElementById('profilContent').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div><div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;">NAMA</div><div style="font-weight:700;">${session.name}</div></div>
+      <div><div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;">ROLE</div><div><span class="badge badge-teal">🤝 Rekber</span></div></div>
+      <div><div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;">EMAIL</div><div style="color:var(--accent);">${session.email}</div></div>
+      <div><div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;">STATUS</div><div><span class="badge badge-green">✓ Aktif</span></div></div>
+    </div>
+  `;
+}
+
+// ==================== LOGOUT ====================
+function logout() {
+  localStorage.removeItem('gta_session');
+  window.location.href = 'index.html';
+}
+
+// ==================== INIT ====================
+renderOrderTable();
+</script>
+</body>
+</html>
